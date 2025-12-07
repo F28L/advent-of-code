@@ -3,28 +3,33 @@ import sys
 
 def run():
     print('Reading input...')
-    txt = sys.stdin.read().strip()
-    ranges, ids = txt.split('\n\n')
+    grid = []
+    for line in sys.stdin:
+        elements = []
+        to_process = line.strip().split(' ')
+        for x in to_process:
+            if len(x) > 0:
+                elements.append(x)
+        grid.append(elements)
+    print(grid)
     print('Finished reading input...')
-    print('Defining fresh id ranges...')
-    fresh_ids = []
-    for r in ranges.strip().split('\n'):
-        s = r.split('-')
-        left = int(s[0])
-        right = int(s[1])
-        fresh_ids.append((left, right))
-    print('Finished defining fresh ids')
-    print(fresh_ids)
-    ct_fresh = 0
-    print('Processing ids...')
-    for line in ids.strip().split('\n'):
-        id = int(line)
-        for r in fresh_ids:
-            if r[0] <= id <= r[1]:
-                ct_fresh += 1
-                print(f'Found fresh id: {id}')
-                break
-    return ct_fresh
+    count = 0
+    for c in range(len(grid[0])):
+        operation = grid[-1][c]
+        to_operate = [int(grid[x][c]) for x in range(len(grid)-1)]
+        print(operation, to_operate)
+        if operation == '*':
+            product = 1
+            for i in range(len(to_operate)):
+                product *= to_operate[i]
+            print(f'Column {c} has value {product}.')
+            count += product
+        else:
+            s = sum(to_operate)
+            print(f'Column {c} has value {s}.')
+            count+=s
+    return count
+
 
 
 if __name__ == "__main__":
